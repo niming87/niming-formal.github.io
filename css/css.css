@@ -1,0 +1,172 @@
+       /* 背景视频样式 */
+       #bg-video {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1; /* 确保视频在所有内容之下 */
+        object-fit: cover; /* 保持宽高比并覆盖整个视口 */
+    }
+
+    /* body样式 */
+    body {
+        user-select: none; /* 禁止选中文本 */
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        text-align: center;
+        color: white;
+        background-color: black;
+        overflow: hidden; /* 防止滚动 */
+    }
+
+    /* 导航样式 */
+    .daohang {
+        list-style-type: none;
+        background-color: transparent;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 20%; /* 左侧导航栏占宽度20% */
+        padding: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 2px solid #87CEEB;
+        border-radius: 10%;
+        box-shadow: #87CEEB 3px 3px 10px;
+    }
+
+    /* 导航列表项样式 */
+    .daohang li {
+        width: 160px;
+        height: 50px;
+        margin-top: 20px;
+        border: 1px solid #87CEEB;
+        border-radius: 10%;
+        box-shadow: #87CEEB 3px 3px 10px;
+    }
+
+    /* 当前选中页面样式 */
+    .current {
+        background-color: lightgreen; /* 当前选中页面的背景色 */
+    }
+
+    /* 按钮样式 */
+    button {
+        color: white;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: inherit;
+        outline: none;
+        width: 100%; /* 按钮宽度为100% */
+        padding: 14px 10px;
+        transition: transform 0.2s; /* 为按钮增加过渡效果 */
+    }
+
+    button:active {
+        transform: scale(0.9); /* 点击时缩小 */
+    }
+
+    button:hover {
+        background-color: #40E0D0; /* 鼠标悬停时的背景色 */
+    }
+
+    /* 其他容器样式 */
+    .time-weather-container {
+        text-align: center;
+        margin-bottom: 300px; /* 增加间距 */
+    }
+
+    .time-weather-container h2 {
+        font-size: 80px;
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    .time-weather-container p {
+        font-size: 15px; /* 减小天气文字的字体大小 */
+        color: white;
+        margin-bottom: 80px;
+    }
+
+    /* 搜索表单样式 */
+    .search-form {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center; /* 垂直居中对齐 */
+    }
+
+    .search-form input[type="text"] {
+        width: 400px;
+        height: 40px;
+        padding: 3px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 5px; /* 设置搜索框与按钮之间的间距 */
+        background-color: transparent;
+    }
+
+    .search-form button {
+        width: 100px;
+        padding: 10px 10px;
+        background-color: #4169E1;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: black;
+    }
+
+    .search-form button:hover {
+        background-color: #4169E1;
+    }
+
+    /* 底部公告样式 */
+    .q {
+        position: absolute;
+        font-family: '楷体';
+        left: 50%; /* 水平居中 */
+        transform: translate(-50%, -50%); /* 调整中心点的位置 */
+        text-align: center; /* 文本水平居中 */
+        color: white; /* 文本颜色 */
+        padding: 10px; /* 内边距 */
+        margin-top: 20px; /* 外边距 */
+        bottom: 0; /* 距离底部的距离 */
+        max-width: 80%; /* 最大宽度，防止过长的文本超出屏幕 */
+        z-index: 1000; /* 确保显示在其他元素之上 */
+    }
+
+    /* 媒体查询：手机和平板 */
+    @media (max-width: 768px) {
+        .daohang {
+            width: 340px;
+            flex-direction: row-reverse;
+            padding: 5px;
+        }
+
+        .daohang li {
+            margin-top: 2px;
+        }
+
+        .search-form input[type="text"] {
+            width: 160px;
+            height: 20px;
+        }
+
+        .search-form button {
+            margin-top: 30px;
+            font-size: 10px;
+        }
+
+        .q {
+            font-size: 12px;
+        }
+    }

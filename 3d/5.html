@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>3D粒子</title>
+    <meta name="viewport" content="width=500, target-densitydpi=device-dpi, user-scalable=0">
+    <link rel="shortcut icon" href="/匿名网站/img/ico.jpg" type="image/x-icon">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            background: #000;
+        }
+
+        #video1 {
+            display: none;
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            width: 100%;
+            object-fit: fill;
+        }
+
+        #playBtn, #pauseBtn {
+            position: fixed;
+            bottom: 20px; /* 按钮距离底部20像素 */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: green; /* 按钮颜色 */
+            color: white; /* 字体颜色 */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer; /* 鼠标悬停时显示为手指 */
+            font-size: 16px;
+            z-index: 10; /* 确保按钮在上层 */
+            margin: 0 5px; /* 增加按钮之间的间隔 */
+        }
+    </style>
+</head>
+
+<body>
+    <div id="div_container">
+        <div class="bg">
+            <video id="video1"
+                src="./3.mp4"
+                loop preload autoplay muted style="transform: translate(-50%, -50%); display: inline;">
+                <source type="video/mp4">
+            </video>
+        </div>
+    </div>
+
+    <audio id="audio_music"
+        src="./爱你.mp3"
+        loop autoplay></audio>
+
+    <button id="playBtn">播放</button>
+    <button id="pauseBtn" style="display: none;">暂停</button>
+
+    <script>
+        const audio = document.getElementById('audio_music');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+
+        playBtn.addEventListener('click', function() {
+            audio.play();
+            playBtn.style.display = "none"; // 隐藏播放按钮
+            pauseBtn.style.display = "inline"; // 显示暂停按钮
+        });
+
+        pauseBtn.addEventListener('click', function() {
+            audio.pause();
+            pauseBtn.style.display = "none"; // 隐藏暂停按钮
+            playBtn.style.display = "inline"; // 显示播放按钮
+        });
+    </script>
+</body>
+</html>
