@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(匿名空间)代码</title>
+    <link rel="shortcut icon" href="./img/ico.jpg" type="image/x-icon">
+
+    <!-- 背景CSS -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #canvasBg {
+            position: fixed;
+            background: #ccc;
+            overflow: auto;
+            z-index: -1;
+        }
+
+        #canvasEvent {
+            position: fixed;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            z-index: 999;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            cursor: url('https://web.ruidan.com/images/aritcle/20220621/02ce3a77300541e7825e5fc00e538791.png'), auto;
+            background-color: #f0f0f0;
+            user-select: none; /* 防止整个页面的文字被选择 */
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 30px;
+            color: #008B8B;
+            margin-bottom: 20px;
+        }
+
+        hr {
+            width: 100%;
+            height: 60px;
+            border: none;
+            background-color: #008B8B;
+        }
+
+        .code1 {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #008B8B;
+            padding: 10px;
+            background-color: white;
+            position: relative;
+            z-index: 1; /* 确保在canvas之上 */
+            border-radius: 8px; /* 圆角 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            font-size: 25px;
+            color: black;
+            font-family: '华文琥珀';
+            border: 1px solid #008B8B;
+            padding: 15px; /* 增加内边距 */
+            margin: 10px 0; /* 每个列表项的上下间距 */
+            transition: background-color 0.3s, transform 0.2s; /* 加入过渡效果 */
+            border-radius: 5px; /* 圆角 */
+            position: relative; /* 相对定位，给阴影效果留空间 */
+        }
+
+        li:hover {
+            background-color: #008B8B; /* 鼠标悬停改变背景颜色 */
+            color: white; /* 鼠标悬停时改变字体颜色 */
+            transform: translateY(-3px); /* 向上移 */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* 增强阴影效果 */
+        }
+
+        a {
+            text-decoration: none; /* 移除链接下划线 */
+            color: inherit; /* 继承父元素颜色 */
+        }
+
+        @media screen and (max-width: 347px) {
+            /* 响应式样式 (可选) */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 背景HTML -->
+    <canvas id="canvasBg"></canvas>
+
+    <!-- 鼠标点击HTML -->
+    <canvas id="canvasEvent" style="width: 100%; height: 100%;"></canvas>
+
+    <h1>项目代码</h1>
+    <hr>
+    <div class="code1">
+        <ul>
+            <li><a href="./3d/5.html">3D粒子传送门</a></li>
+            <li><a href="./我想陪你看烟花.html">I want to watch the fireworks with you</a></li>
+            <li><a href="./龙卷风/炫酷多彩龙卷风风暴粒子canvas特效动画/index.html">龙卷风传送门</a></li>
+            <li><a href="./皮卡丘/index.html">皮卡丘传送门</a></li>
+            <li><a href="./表白旋转相册/表白相册.html">表白旋转相册传送门</a></li>
+            <li><a href="./时钟/时钟.html">时钟传送门</a></li>
+            <li><a href="./更多项目/项目1.html">更多项目 1</a></li>
+            <li><a href="./更多项目/项目2.html">更多项目 2</a></li>
+            <li><a href="./更多项目/项目3.html">更多项目 3</a></li>
+            <li><a href="./更多项目/项目4.html">更多项目 4</a></li>
+            <li><a href="./更多项目/项目5.html">更多项目 5</a></li>
+            <li><a href="./更多项目/项目6.html">更多项目 6</a></li>
+        </ul>
+    </div>
+
+    <div style="width: 100%; height: 146px; background: transparent;">
+        <p style="display: flex; justify-content: center; align-items: center; margin-top: 60PX;">更多精彩项目，请关注公众号：webRuidan</p>
+    </div>
+
+    <!-- 背景JS -->
+    <script>
+        window.requestAnimationFrame = (function () {
+            return (
+                window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                function (callback) {
+                    window.setTimeout(callback, 1000 / 2);
+                }
+            );
+        })();
+
+        var myCanvas = document.getElementById("canvasBg");
+        var ctx = myCanvas.getContext("2d");
+        var num;
+        var w, h;
+        var duixiang = [];
+        var move = {};
+
+        function widthheight() {
+            w = myCanvas.width = window.innerWidth;
+            h = myCanvas.height = window.innerHeight;
+            num = Math.floor(w * h * 0.00028);
+            for (var i = 0; i < num; i++) {
+                duixiang[i] = {
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    cX: Math.random() * 0.6 - 0.3,
+                    cY: Math.random() * 0.6 - 0.3,
+                    R: Math.floor(Math.random() * 5) + 2,
+                    r: Math.floor(Math.random() * 254),
+                    g: Math.floor(Math.random() * 254),
+                    b: Math.floor(Math.random() * 254),
+                };
+                Cricle(
+                    duixiang[i].x,
+                    duixiang[i].y,
+                    duixiang[i].R,
+                    duixiang[i].r,
+                    duixiang[i].g,
+                    duixiang[i].b
+                );
+            }
+        }
+        widthheight();
+
+        function Cricle(x, y, R, r, g, b) {
+            ctx.save();
+            ctx.globalAlpha = Math.random() > 0.991 ? 0.9 : 0.47;
+            ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")";
+            ctx.beginPath();
+            ctx.arc(x, y, R, Math.PI * 2, 0);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+        Cricle();
+
+        !(function draw() {
+            ctx.clearRect(0, 0, w, h);
+            for (var i = 0; i < num; i++) {
+                duixiang[i].x += duixiang[i].cX;
+                duixiang[i].y += duixiang[i].cY;
+                if (duixiang[i].x > w || duixiang[i].x < 0) {
+                    duixiang[i].cX = -duixiang[i].cX;
+                }
+                if (duixiang[i].y > h || duixiang[i].y < 0) {
+                    duixiang[i].cY = -duixiang[i].cY;
+                }
+                Cricle(
+                    duixiang[i].x,
+                    duixiang[i].y,
+                    duixiang[i].R,
+                    duixiang[i].r,
+                    duixiang[i].g,
+                    duixiang[i].b
+                );
+            }
+            window.requestAnimationFrame(draw);
+        })();
+
+        window.onresize = function () {
+            location.reload();
+        };
+    </script>
+
+    <!-- 鼠标点击JS -->
+    <script>
+        var _createClass = (function () {
+            function defineProperties(target, props) {
+                for (var i = 0; i < props.length; i++) {
+                    var descriptor = props[i];
+                    descriptor.enumerable = descriptor.enumerable || false;
+                    descriptor.configurable = true;
+                    if ("value" in descriptor) descriptor.writable = true;
+                    Object.defineProperty(target, descriptor.key, descriptor);
+                }
+            }
+            return function (Constructor, protoProps, staticProps) {
+                if (protoProps) defineProperties(Constructor.prototype, protoProps);
+                if (staticProps) defineProperties(Constructor, staticProps);
+                return Constructor;
+            };
+        })();
+
+        function _classCallCheck(instance, Constructor) {
+            if (!(instance instanceof Constructor)) {
+                throw new TypeError("Cannot call a class as a function");
+            }
+        }
+
+        var getRandom = function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        };
+
+        var getRandomInt = function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        };
+
+        var getRandomColor = function getRandomColor() {
+            var colors = [
+                "rgba(231, 76, 60, 1)",
+                "rgba(241, 196, 15, 1)",
+                "rgba(46, 204, 113, 1)",
+                "rgba(52, 152, 219, 1)",
+                "rgba(155, 89, 182, 1)",
+            ];
+
+            return colors[getRandomInt(0, colors.length)];
+        };
+
+        var Particle = (function () {
+            function Particle(system, x, y) {
+                _classCallCheck(this, Particle);
+                this.system = system;
+                this.universe = this.system.world.universe;
+                this.x = x;
+                this.y = y;
+                this.color = getRandomColor();
+                this.life = 1;
+                this.aging = getRandom(0.99, 0.999);
+
+                this.r = getRandomInt(12, 16);
+                this.speed = getRandom(18, 18.5);
+                this.velocity = [
+                    getRandom(-this.speed, this.speed),
+                    getRandom(-this.speed, this.speed),
+                ];
+            }
+            _createClass(Particle, [
+                {
+                    key: "update",
+                    value: function update(dt) {
+                        this.life *= this.aging;
+
+                        if (
+                            this.r < 0.1 ||
+                            this.life === 0 ||
+                            this.x + this.r < 0 ||
+                            this.x - this.r > this.universe.width ||
+                            this.y + this.r < 0 ||
+                            this.y - this.r > this.universe.height
+                        ) {
+                            this.system.removeObject(this);
+                        }
+
+                        this.r *= this.life;
+                        this.x += this.velocity[0];
+                        this.y += this.velocity[1];
+                    },
+                },
+                {
+                    key: "render",
+                    value: function render(ctx) {
+                        ctx.fillStyle = this.color;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.r * 1.2, 0, 2 * Math.PI, false);
+                        ctx.fill();
+                        ctx.closePath();
+
+                        var r = this.color.match(/([0-9]+)/g)[0];
+                        var g = this.color.match(/([0-9]+)/g)[1];
+                        var b = this.color.match(/([0-9]+)/g)[2];
+
+                        var spread = 1.5;
+                        var gradient = ctx.createRadialGradient(
+                            this.x,
+                            this.y,
+                            this.r,
+                            this.x,
+                            this.y,
+                            this.r * spread
+                        );
+
+                        gradient.addColorStop(0, "rgba(" + r + ", " + g + ", " + b + ", 0.5)");
+                        gradient.addColorStop(1, "rgba(" + r + ", " + g + ", " + b + ", 0)");
+
+                        ctx.globalCompositeOperation = "lighter";
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.r * spread, 0, 2 * Math.PI, false);
+                        ctx.fill();
+                        ctx.closePath();
+                        ctx.globalCompositeOperation = "source-over";
+
+                        var offset = this.r * 0.5;
+                        var color = "rgba(" + g + ", " + b + ", " + r + ", 0.5)";
+
+                        ctx.globalCompositeOperation = "lighter";
+                        ctx.fillStyle = color;
+                        ctx.beginPath();
+                        ctx.arc(
+                            this.x + offset,
+                            this.y + offset,
+                            this.r,
+                            0,
+                            2 * Math.PI,
+                            false
+                        );
+                        ctx.fill();
+                        ctx.closePath();
+                    },
+                },
+            ]);
+            return Particle;
+        })();
+
+        var Crown = (function () {
+            function Crown(system, x, y) {
+                _classCallCheck(this, Crown);
+                this.system = system;
+                this.x = x;
+                this.y = y;
+                this.r = getRandomInt(5, 15);
+                this.mod = 1.1;
+                this.life = 0.5;
+                this.aging = getRandom(0.83, 0.899);
+                this.speed = getRandom(8, 9);
+                this.color = {
+                    r: getRandomInt(236, 242),
+                    g: getRandomInt(70, 80),
+                    b: getRandomInt(50, 70),
+                };
+
+                this.angle1 = Math.PI * getRandom(0, 2);
+                this.angle2 = this.angle1 + Math.PI * getRandom(0.3, 0.4);
+            }
+            _createClass(Crown, [
+                {
+                    key: "update",
+                    value: function update(dt) {
+                        this.life *= this.aging;
+
+                        if (this.life <= 0.0001) this.system.removeObject(this);
+
+                        this.r += Math.abs(1 - this.life) * this.speed;
+
+                        this.x1 = this.x + this.r * Math.cos(this.angle1);
+                        this.y1 = this.y + this.r * Math.sin(this.angle1);
+
+                        this.angle3 = this.angle1 + (this.angle2 - this.angle1) / 2;
+                        this.x2 = this.x + this.r * this.mod * Math.cos(this.angle3);
+                        this.y2 = this.y + this.r * this.mod * Math.sin(this.angle3);
+                    },
+                },
+                {
+                    key: "render",
+                    value: function render(ctx) {
+                        var gradient = ctx.createRadialGradient(
+                            this.x,
+                            this.y,
+                            this.r * 0.9,
+                            this.x,
+                            this.y,
+                            this.r
+                        );
+
+                        gradient.addColorStop(
+                            0,
+                            "rgba(" +
+                            this.color.r +
+                            ", " +
+                            this.color.g +
+                            ", " +
+                            this.color.b +
+                            ", " +
+                            this.life +
+                            ")"
+                        );
+                        gradient.addColorStop(
+                            1,
+                            "rgba(" +
+                            this.color.r +
+                            ", " +
+                            this.color.g +
+                            ", " +
+                            this.color.b +
+                            ", " +
+                            this.life * 0.5 +
+                            ")"
+                        );
+
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.r, this.angle1, this.angle2, false);
+                        ctx.quadraticCurveTo(this.x2, this.y2, this.x1, this.y1);
+                        ctx.fill();
+                        ctx.closePath();
+                    },
+                },
+            ]);
+            return Crown;
+        })();
+
+        var Explosion = (function () {
+            function Explosion(world, x, y) {
+                _classCallCheck(this, Explosion);
+                this.world = world;
+                this.x = x;
+                this.y = y;
+                this.objects = [];
+
+                var particles = getRandomInt(10, 30);
+                var crowns = particles * getRandom(0.4, 0.5);
+
+                while (crowns-- > 0) {
+                    this.addCrown();
+                }
+                while (particles-- > 0) {
+                    this.addParticle();
+                }
+            }
+            _createClass(Explosion, [
+                {
+                    key: "update",
+                    value: function update(dt) {
+                        this.objects.forEach(function (obj) {
+                            if (obj) obj.update(dt);
+                        });
+
+                        if (this.objects.length <= 0) {
+                            this.world.clearExplosion(this);
+                        }
+                    },
+                },
+                {
+                    key: "render",
+                    value: function render(ctx) {
+                        this.objects.forEach(function (obj) {
+                            if (obj) obj.render(ctx);
+                        });
+                    },
+                },
+                {
+                    key: "addCrown",
+                    value: function addCrown() {
+                        this.objects.push(new Crown(this, this.x, this.y));
+                    },
+                },
+                {
+                    key: "addParticle",
+                    value: function addParticle() {
+                        this.objects.push(new Particle(this, this.x, this.y));
+                    },
+                },
+                {
+                    key: "removeObject",
+                    value: function removeObject(obj) {
+                        var index = this.objects.indexOf(obj);
+
+                        if (index !== -1) {
+                            this.objects.splice(index, 1);
+                        }
+                    },
+                },
+            ]);
+            return Explosion;
+        })();
+
+        var ConfettiWorld = (function () {
+            function ConfettiWorld() {
+                _classCallCheck(this, ConfettiWorld);
+            }
+            _createClass(ConfettiWorld, [
+                {
+                    key: "init",
+                    value: function init() {
+                        this.objects = [];
+                        window.addEventListener("click", this.explode.bind(this));
+
+                        var counter = 0;
+                        while (counter-- > 0) {
+                            this.explode({
+                                clientX: window.event.clientX,
+                                clientY: window.event.clientY,
+                            });
+                        }
+                    },
+                },
+                {
+                    key: "update",
+                    value: function update(dt) {
+                        this.objects.forEach(function (obj) {
+                            if (obj) obj.update(dt);
+                        });
+
+                        var amount = this.objects.reduce(function (sum, explosion) {
+                            return (sum += explosion.objects.length);
+                        }, 0);
+                    },
+                },
+                {
+                    key: "render",
+                    value: function render(ctx) {
+                        this.objects.forEach(function (obj) {
+                            if (obj) obj.render(ctx);
+                        });
+                    },
+                },
+                {
+                    key: "explode",
+                    value: function explode(event) {
+                        var x = event.clientX;
+                        var y = event.clientY;
+
+                        this.objects.push(new Explosion(this, x, y));
+                    },
+                },
+                {
+                    key: "clearExplosion",
+                    value: function clearExplosion(explosion) {
+                        var index = this.objects.indexOf(explosion);
+
+                        if (index !== -1) {
+                            this.objects.splice(index, 1);
+                        }
+                    },
+                },
+            ]);
+            return ConfettiWorld;
+        })();
+
+        var Time = (function () {
+            function Time() {
+                _classCallCheck(this, Time);
+                this.now = 0;
+                this.prev = 0;
+                this.elapsed = 0;
+                this.delta = 0;
+                this.fps = 60;
+                this.step = 1 / 60;
+            }
+            _createClass(Time, [
+                {
+                    key: "update",
+                    value: function update(time) {
+                        this.now = time;
+                        this.elapsed = (this.now - this.prev) / 1000;
+                        this.prev = this.now;
+                        this.delta += this.elapsed;
+                    },
+                },
+                {
+                    key: "raf",
+                    value: function raf(func) {
+                        window.requestAnimationFrame(func);
+                    },
+                },
+                {
+                    key: "hasFrames",
+                    value: function hasFrames() {
+                        return this.delta >= this.step;
+                    },
+                },
+                {
+                    key: "processFrame",
+                    value: function processFrame() {
+                        this.delta -= this.step;
+                    },
+                },
+            ]);
+            return Time;
+        })();
+
+        var Universe = (function () {
+            function Universe(element) {
+                _classCallCheck(this, Universe);
+                this.el = element;
+                this.ctx = this.el.getContext("2d");
+                this.pixelRatio = window.devicePixelRatio;
+                this.time = new Time();
+
+                this.worlds = {};
+                this.world = null;
+
+                this.updateSize();
+                window.addEventListener("resize", this.updateSize.bind(this));
+
+                this.addWorld("confetti", ConfettiWorld);
+                this.setWorld("confetti");
+
+                this.start();
+            }
+            _createClass(Universe, [
+                {
+                    key: "start",
+                    value: function start() {
+                        this.time.raf(this.tick.bind(this));
+                    },
+                },
+                {
+                    key: "tick",
+                    value: function tick(time) {
+                        this.time.update(time);
+
+                        if (this.time.hasFrames()) {
+                            this.update();
+                            this.time.processFrame();
+                        }
+
+                        this.render();
+                        this.time.raf(this.tick.bind(this));
+                    },
+                },
+                {
+                    key: "update",
+                    value: function update() {
+                        this.world.update(this.time.step);
+                    },
+                },
+                {
+                    key: "render",
+                    value: function render() {
+                        var gradient = this.ctx.createLinearGradient(0, 0, this.width, this.height);
+                        this.ctx.clearRect(0, 0, this.width, this.height);
+                        this.world.render(this.ctx);
+                    },
+
+                    // Helpers
+                },
+                {
+                    key: "updateSize",
+                    value: function updateSize() {
+                        this.width = window.innerWidth;
+                        this.height = window.innerHeight;
+                        this.el.width = this.width * this.pixelRatio;
+                        this.el.height = this.height * this.pixelRatio;
+                        this.el.style.width = window.innerWidth + "px";
+                        this.el.style.height = window.innerHeight + "px";
+                        this.ctx.scale(this.pixelRatio, this.pixelRatio);
+                    },
+                },
+                {
+                    key: "addWorld",
+                    value: function addWorld(worldName, World) {
+                        this.worlds[worldName] = new World();
+                        this.worlds[worldName].universe = this;
+                        this.worlds[worldName].init();
+                    },
+                },
+                {
+                    key: "setWorld",
+                    value: function setWorld(worldName) {
+                        this.world = this.worlds[worldName];
+                    },
+                },
+            ]);
+            return Universe;
+        })();
+
+        console.clear();
+        var element = document.querySelector("#canvasEvent");
+        window.Canvas = new Universe(element);
+    </script>
+</body>
+
+</html>

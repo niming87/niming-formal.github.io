@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(匿名空间)课程页面</title>
+    <link rel="shortcut icon" href="./img/ico.jpg" type="image/x-icon">
+    <style>
+        * { 
+            box-sizing: border-box; 
+            list-style: none;
+        }
+        li{
+            width: 290px;
+            height: 40px;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        body { 
+            margin: 0; 
+            font-family: Arial, sans-serif; 
+        }
+        .container { 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            height: 100vh; 
+        }
+        .course-name { 
+            width: 20%; 
+            background-color: red; 
+            padding: 20px; 
+            text-align: center; 
+        }
+        .video-container { 
+            width: 80%; 
+            background-color: lightblue; 
+            padding: 20px; 
+        }
+        .video-player { 
+            width: 100%; 
+            height: 0; 
+            padding-bottom: 56.25%; /* 保持 16:9 的宽高比 */ 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .video-player iframe { 
+            width: 400px; 
+            height: 300px; 
+            position: absolute; 
+            top: 0; 
+            left: 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="course-name"><ul>
+            <li><button>HTML5学习</button></li>
+            <li><button>CSS3学习</button></li>
+            <li><button>JavaScript学习</button>/li>
+            <li><button>python课程</button></li>
+            <li><button>C语言课程</button></li>
+            <li><button>C++课程</button></li>
+        </ul></div>
+        <div class="video-container">
+            <div class="video-player">
+                <!-- 将 YouTube 视频 ID 替换为您自己的视频 ID -->
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

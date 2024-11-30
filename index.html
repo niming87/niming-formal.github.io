@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>匿名空间</title>
+    <link rel="shortcut icon" href="./img/ico.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="./css/css.css">
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <video id="bg-video" autoplay muted loop>
+        <source src="img/35.mp4" type="video/mp4">
+        <source src="img/35.webm" type="video/webm">
+        您的浏览器不支持 HTML5 video 标签。
+    </video>
+
+    <div class="header">
+        <ul class="daohang">
+            <li><button onclick="navigate('1.html')">首页</button></li>
+            <li><button onclick="navigate('2.html')">课程</button></li>
+            <li><button onclick="navigate('3.html')">代码</button></li>
+            <li><button onclick="navigate('4.html')">关于</button></li>
+            <li><button onclick="navigate('5.html')">更多</button></li>
+        </ul>
+    </div>
+
+    <div class="time-weather-container">
+        <h2 id="current-time"></h2>
+        <p id="current-city"></p>
+        <p id="current-weather"></p>
+    </div>
+
+    <div class="search-form">
+        <form action="https://www.baidu.com/s" method="get" target="_self">
+            <span><input type="text" name="wd" placeholder="搜索内容"></span>
+            <span><button type="submit">百度一下</button></span>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('contextmenu', function (event) {
+            event.preventDefault();
+        });
+
+        function navigate(href) {
+            window.location.href = href;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('current-time').innerText = `${hours}:${minutes}:${seconds}`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime(); // 初始化显示时间
+    </script>
+
+    <div class="q">本网站纯属个人网站，不得盗用或用于非法目的</div>
+</body>
+
+</html>
